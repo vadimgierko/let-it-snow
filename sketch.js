@@ -14,7 +14,7 @@ function setup() {
     }
 
     for (let n = 0; n < 1000; n++) {
-        ys.push(random(-600, 0));
+        ys.push(random(-canvasHeight, 0));
     }
 }
 
