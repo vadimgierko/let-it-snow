@@ -23,7 +23,9 @@ class Tree {
   }
 }
 
+let isLoadForTheFirstTime = true;
 let isPlaying = false;
+let startButton;
 
 function setup() {
     canvasWidth = windowWidth;
@@ -39,6 +41,12 @@ function setup() {
         xs3.push(random(canvasWidth));
         ys3.push(random(-canvasHeight, 0));
     }
+
+    startButton = createButton("Press to let it snow!");
+    startButton.style("background-color", color("red"));
+    startButton.style("color", color("white"));
+    startButton.style("width", "200px");
+    startButton.style("font-size", "20px");
 }
 
 function letItSnow() {
@@ -84,12 +92,22 @@ function letItSnow() {
 
 function playTune() {
     isPlaying = true;
-    document.getElementById("tune").play();
+    const tune = document.getElementById("tune");
+    tune.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+    }, false);
+    tune.play();
 }
 
 function stopTune() {
     isPlaying = false;
     document.getElementById("tune").pause();
+}
+
+function startAnimation() {
+    isLoadForTheFirstTime = false;
+    playTune();
 }
 
 function draw() {
@@ -98,11 +116,20 @@ function draw() {
     //sky
     fill("navy");
     rect(0, 0, canvasWidth, canvasHeight * 2/3);
-    
-    // play button
-    button = createButton(isPlaying ? "||" : '>');
-    button.position(canvasWidth - 50, 10);
-    button.mousePressed(isPlaying? stopTune : playTune);
+
+    if (isLoadForTheFirstTime) {
+        // start btn
+        startButton.position(canvasWidth/2 - startButton.width/2, canvasHeight/2 - startButton.height/2);
+        startButton.mousePressed(startAnimation);
+    } else {
+        startButton.remove();
+        // play button
+        let button = createButton(isPlaying ? "||" : '>');
+        button.position(canvasWidth - 50, 10);
+        button.style("background-color", color("red"));
+        button.style("color", color("white"));
+        button.mousePressed(isPlaying? stopTune : playTune);
+    }
 
     //text
     stroke("white");
