@@ -19,6 +19,6 @@ To make the animation seem more realistic, I created a pseudo 3D illusion thanks
 &copy; 1959 Sammy Cahn, Jule Styne & Dean Martin
 
 ### To do:
-[X] optimize trees 3D illusion & perspective
-[X] auto window resizing
-[X] relocate trees groups due to resized window
+- [X] optimize trees 3D illusion & perspective
+- [X] auto window resizing
+- [X] relocate trees groups due to resized window
