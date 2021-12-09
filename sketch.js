@@ -173,7 +173,7 @@ function draw() {
     textStyle(NORMAL)
     textAlign(CENTER);
     textSize(17);
-    text("created by Vadim Gierko | 2021", canvasWidth/2, canvasHeight - 30);
+    text("© 2021 Vadim Gierko", canvasWidth/2, canvasHeight - 30);
 
     letItSnow();
 }
