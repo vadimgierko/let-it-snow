@@ -1,7 +1,28 @@
-let canvasWidth;
-let canvasHeight;
+let canvasWidth, canvasHeight;
+// bigger / closer snow / 1000
 let xs = [];
 let ys = [];
+// smaller / background snow / 2000
+let xs2 = [];
+let ys2 = [];
+// smaller 3 / background snow / 2000
+let xs3 = [];
+let ys3 = [];
+
+class Tree {
+  constructor(x, y, w, h, color) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.color = color;
+  }
+  draw() {
+    fill(color);
+    triangle(x, y, x + w/2, y - h, x + w, y);
+  }
+}
+
 let isPlaying = false;
 
 function setup() {
@@ -9,30 +30,56 @@ function setup() {
     canvasHeight = windowHeight;
     createCanvas(canvasWidth, canvasHeight);
 
+    // populate snow arrays with xs & ys
     for (let i = 0; i < 1000; i++) {
         xs.push(random(canvasWidth));
-    }
-
-    for (let n = 0; n < 1000; n++) {
         ys.push(random(-canvasHeight, 0));
+        xs2.push(random(canvasWidth));
+        ys2.push(random(-canvasHeight, 0));
+        xs3.push(random(canvasWidth));
+        ys3.push(random(-canvasHeight, 0));
     }
 }
 
 function letItSnow() {
-    //snow
+
     for (let i = 0; i < 1000; i++) {
         fill("white");
         noStroke();
+        ellipse(xs3[i], ys3[i], 1, 1);
+        ellipse(xs2[i], ys2[i], 3, 3);
         ellipse(xs[i], ys[i], 5, 5);
     }
 
     for (let n = 0; n < 1000; n++) {
-        if (ys[n] < canvasHeight) {
-        ys[n]++;
+        if (ys3[n] < canvasHeight) {
+            if (isPlaying) {
+                ys3[n]++;
+            }
         } else {
-        ys[n] = 0;
+            ys3[n] = 0;
         }
     }
+
+    for (let n = 0; n < 1000; n++) {
+        if (ys2[n] < canvasHeight) {
+            if (isPlaying) {
+                ys2[n] += 2;
+            }
+        } else {
+            ys2[n] = 0;
+        }
+    }
+
+    for (let n = 0; n < 1000; n++) {
+        if (ys[n] < canvasHeight) {
+            if (isPlaying) {
+                ys[n] += 3;
+            }
+        } else {
+            ys[n] = 0;
+        }
+    }   
 }
 
 function playTune() {
@@ -94,27 +141,12 @@ function draw() {
     fill("green");
     triangle(canvasWidth - 240, canvasHeight * 2/3 + 50, canvasWidth - 200, canvasHeight * 2/3 - 10, canvasWidth - 160, canvasHeight * 2/3 + 50);
 
-    //snow
-    for (let i = 0; i < 1000; i++) {
-        fill("white");
-        noStroke();
-        ellipse(xs[i], ys[i], 5, 5);
-    }
-
-    for (let n = 0; n < 1000; n++) {
-        if (ys[n] < canvasHeight) {
-            if (isPlaying) {
-                ys[n]++;
-            }
-        } else {
-            ys[n] = 0;
-        }
-    }
-
     // footer
     fill(170);
     textStyle(NORMAL)
     textAlign(CENTER);
     textSize(17);
     text("created by Vadim Gierko | 2021", canvasWidth/2, canvasHeight - 30);
+
+    letItSnow();
 }
