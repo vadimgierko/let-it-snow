@@ -2,10 +2,10 @@ let canvasWidth, canvasHeight;
 // bigger / closer snow / 1000
 let xs = [];
 let ys = [];
-// smaller / background snow / 2000
+// middle snow / 1000
 let xs2 = [];
 let ys2 = [];
-// smaller 3 / background snow / 2000
+// smaller background snow / 1000
 let xs3 = [];
 let ys3 = [];
 
@@ -59,10 +59,20 @@ function letItSnow() {
         ellipse(xs[i], ys[i], 5, 5);
     }
 
+    let t = 10000;
+    let t2 = 1000;
+    let t3 = 0;
+  
     for (let n = 0; n < 1000; n++) {
         if (ys3[n] < canvasHeight) {
             if (isPlaying) {
-                ys3[n]++;
+              ys3[n]++;
+              if (xs3[n] < canvasWidth) {
+                  xs3[n] += map(noise(t3), 0, 1, -1, 1);
+                  t3 += 0.005;
+                } else {
+                  xs3[n] = 0;
+                }
             }
         } else {
             ys3[n] = 0;
@@ -73,6 +83,12 @@ function letItSnow() {
         if (ys2[n] < canvasHeight) {
             if (isPlaying) {
                 ys2[n] += 2;
+                if (xs2[n] < canvasWidth) {
+                  xs2[n] += map(noise(t2), 0, 1, -1, 1);
+                  t2 += 0.005;
+                } else {
+                  xs2[n] = 0;
+                }
             }
         } else {
             ys2[n] = 0;
@@ -83,6 +99,12 @@ function letItSnow() {
         if (ys[n] < canvasHeight) {
             if (isPlaying) {
                 ys[n] += 3;
+                if (xs[n] < canvasWidth) {
+                  xs[n] += map(noise(t), 0, 1, -1, 1);
+                  t += 0.03;
+                } else {
+                  xs[n] = 0;
+                }
             }
         } else {
             ys[n] = 0;

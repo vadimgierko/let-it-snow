@@ -15,6 +15,8 @@ To make the animation seem more realistic, I created a pseudo 3D illusion thanks
 - more distant snowflakes are smaller, while closer are larger
 - more distant snowflakes fall slower, and closer ones fall faster
 
+In addition, I've implemented noise effect (noise() in p5.js) to falling snow, so now it seems to fall more naturally -> each snowflake moves sometimes slightly left or right, like in real life!
+
 ### Music Copyright
 &copy; 1959 Sammy Cahn, Jule Styne & Dean Martin
 
