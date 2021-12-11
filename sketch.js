@@ -1,11 +1,10 @@
-let canvasWidth, canvasHeight;
 // bigger / closer snow / 1000
 let xs = [];
 let ys = [];
-// smaller / background snow / 2000
+// middle snow / 1000
 let xs2 = [];
 let ys2 = [];
-// smaller 3 / background snow / 2000
+// smaller background snow / 1000
 let xs3 = [];
 let ys3 = [];
 
@@ -25,21 +24,19 @@ class Tree {
 
 let isLoadForTheFirstTime = true;
 let isPlaying = false;
-let startButton;
+let startButton, button;
 
 function setup() {
-    canvasWidth = windowWidth;
-    canvasHeight = windowHeight;
-    createCanvas(canvasWidth, canvasHeight);
+    createCanvas(windowWidth, windowHeight);
 
     // populate snow arrays with xs & ys
     for (let i = 0; i < 1000; i++) {
-        xs.push(random(canvasWidth));
-        ys.push(random(-canvasHeight, 0));
-        xs2.push(random(canvasWidth));
-        ys2.push(random(-canvasHeight, 0));
-        xs3.push(random(canvasWidth));
-        ys3.push(random(-canvasHeight, 0));
+        xs.push(random(windowWidth));
+        ys.push(random(-windowHeight, 0));
+        xs2.push(random(windowWidth));
+        ys2.push(random(-windowHeight, 0));
+        xs3.push(random(windowWidth));
+        ys3.push(random(-windowHeight, 0));
     }
 
     startButton = createButton("Press to let it snow!");
@@ -47,6 +44,14 @@ function setup() {
     startButton.style("color", color("white"));
     startButton.style("width", "200px");
     startButton.style("font-size", "20px");
+
+    // play button
+    button = createButton(isPlaying ? "||" : '>');
+    button.style("background-color", color("red"));
+    button.style("color", color("white"));
+
+    console.log(windowWidth);
+    console.log(windowHeight);
 }
 
 function letItSnow() {
@@ -59,10 +64,20 @@ function letItSnow() {
         ellipse(xs[i], ys[i], 5, 5);
     }
 
+    let t = 10000;
+    let t2 = 1000;
+    let t3 = 0;
+  
     for (let n = 0; n < 1000; n++) {
-        if (ys3[n] < canvasHeight) {
+        if (ys3[n] < windowHeight) {
             if (isPlaying) {
-                ys3[n]++;
+              ys3[n]++;
+              if (xs3[n] < windowWidth) {
+                  xs3[n] += map(noise(t3), 0, 1, -1, 1);
+                  t3 += 0.005;
+                } else {
+                  xs3[n] = 0;
+                }
             }
         } else {
             ys3[n] = 0;
@@ -70,9 +85,15 @@ function letItSnow() {
     }
 
     for (let n = 0; n < 1000; n++) {
-        if (ys2[n] < canvasHeight) {
+        if (ys2[n] < windowHeight) {
             if (isPlaying) {
                 ys2[n] += 2;
+                if (xs2[n] < windowWidth) {
+                  xs2[n] += map(noise(t2), 0, 1, -1, 1);
+                  t2 += 0.005;
+                } else {
+                  xs2[n] = 0;
+                }
             }
         } else {
             ys2[n] = 0;
@@ -80,9 +101,15 @@ function letItSnow() {
     }
 
     for (let n = 0; n < 1000; n++) {
-        if (ys[n] < canvasHeight) {
+        if (ys[n] < windowHeight) {
             if (isPlaying) {
                 ys[n] += 3;
+                if (xs[n] < windowWidth) {
+                  xs[n] += map(noise(t), 0, 1, -1, 1);
+                  t += 0.03;
+                } else {
+                  xs[n] = 0;
+                }
             }
         } else {
             ys[n] = 0;
@@ -115,19 +142,15 @@ function draw() {
     
     //sky
     fill("navy");
-    rect(0, 0, canvasWidth, canvasHeight * 2/3);
+    rect(0, 0, windowWidth, windowHeight * 2/3);
 
     if (isLoadForTheFirstTime) {
         // start btn
-        startButton.position(canvasWidth/2 - startButton.width/2, canvasHeight/2 - startButton.height/2);
+        startButton.position(windowWidth/2 - startButton.width/2, windowHeight/2 - startButton.height/2);
         startButton.mousePressed(startAnimation);
     } else {
         startButton.remove();
-        // play button
-        let button = createButton(isPlaying ? "||" : '>');
-        button.position(canvasWidth - 50, 10);
-        button.style("background-color", color("red"));
-        button.style("color", color("white"));
+        button.position(windowWidth - 50, 10);
         button.mousePressed(isPlaying? stopTune : playTune);
     }
 
@@ -137,43 +160,48 @@ function draw() {
     textAlign(CENTER);
     textStyle(BOLD);
     textSize(30);
-    text("Let It Snow", canvasWidth/2, canvasHeight * 1/6);
+    text("Let It Snow", windowWidth/2, windowHeight * 1/6);
     textSize(40);
-    text("Let It Snow", canvasWidth/2, canvasHeight * 1/6 + 70);
+    text("Let It Snow", windowWidth/2, windowHeight * 1/6 + 70);
     textSize(50);
-    text("Let It Snow", canvasWidth/2, canvasHeight * 1/6 + 150);
+    text("Let It Snow", windowWidth/2, windowHeight * 1/6 + 150);
 
     //trees
     noStroke()
 
     //first group
     fill("green");
-    triangle(60, canvasHeight * 2/3 + 5, 88, canvasHeight * 2/3 - 40, 116, canvasHeight * 2/3 + 5);
+    triangle(60, windowHeight * 2/3 + 5, 88, windowHeight * 2/3 - 40, 116, windowHeight * 2/3 + 5);
     fill("darkgreen");
-    triangle(90, canvasHeight * 2/3 + 30, 115, canvasHeight * 2/3 - 20, 140, canvasHeight * 2/3 + 30);
+    triangle(90, windowHeight * 2/3 + 30, 115, windowHeight * 2/3 - 20, 140, windowHeight * 2/3 + 30);
     fill("green");
-    triangle(200, canvasHeight * 2/3 + 50, 230, canvasHeight * 2/3 - 10, 260, canvasHeight * 2/3 + 50);
+    triangle(200, windowHeight * 2/3 + 50, 230, windowHeight * 2/3 - 10, 260, windowHeight * 2/3 + 50);
 
     // second group of trees
     fill("green");
-    triangle(canvasWidth/2 - 30, canvasHeight * 2/3 + 10, canvasWidth/2, canvasHeight * 2/3 - 40, canvasWidth/2 + 30, canvasHeight * 2/3 + 10);
+    triangle(windowWidth/2 - 30, windowHeight * 2/3 + 10, windowWidth/2, windowHeight * 2/3 - 40, windowWidth/2 + 30, windowHeight * 2/3 + 10);
     fill("darkgreen");
-    triangle(canvasWidth/2 - 60, canvasHeight * 2/3 + 30, canvasWidth/2 - 30, canvasHeight * 2/3 - 20, canvasWidth/2, canvasHeight * 2/3 + 30);
+    triangle(windowWidth/2 - 60, windowHeight * 2/3 + 30, windowWidth/2 - 30, windowHeight * 2/3 - 20, windowWidth/2, windowHeight * 2/3 + 30);
     
     // third group of trees
     fill("green");
-    triangle(canvasWidth - 100, canvasHeight * 2/3 + 10, canvasWidth - 70, canvasHeight * 2/3 - 40, canvasWidth - 40, canvasHeight * 2/3 + 10);
+    triangle(windowWidth - 100, windowHeight * 2/3 + 10, windowWidth - 70, windowHeight * 2/3 - 40, windowWidth - 40, windowHeight * 2/3 + 10);
     fill("darkgreen");
-    triangle(canvasWidth - 200, canvasHeight * 2/3 + 30, canvasWidth - 160, canvasHeight * 2/3 - 20, canvasWidth - 120, canvasHeight * 2/3 + 30);
+    triangle(windowWidth - 200, windowHeight * 2/3 + 30, windowWidth - 160, windowHeight * 2/3 - 20, windowWidth - 120, windowHeight * 2/3 + 30);
     fill("green");
-    triangle(canvasWidth - 240, canvasHeight * 2/3 + 50, canvasWidth - 200, canvasHeight * 2/3 - 10, canvasWidth - 160, canvasHeight * 2/3 + 50);
+    triangle(windowWidth - 240, windowHeight * 2/3 + 50, windowWidth - 200, windowHeight * 2/3 - 10, windowWidth - 160, windowHeight * 2/3 + 50);
 
     // footer
     fill(170);
     textStyle(NORMAL)
     textAlign(CENTER);
     textSize(17);
-    text("© 2021 Vadim Gierko", canvasWidth/2, canvasHeight - 30);
+    text("© 2021 Vadim Gierko", windowWidth/2, windowHeight - 30);
 
     letItSnow();
 }
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
