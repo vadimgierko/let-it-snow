@@ -7,18 +7,23 @@ let ys2 = [];
 // smaller background snow / 1000
 let xs3 = [];
 let ys3 = [];
+// trees array
+let trees = [];
 
 class Tree {
-  constructor(x, y, w, h, color) {
+
+  constructor(x, y, size, greenScale) {
     this.x = x;
     this.y = y;
-    this.w = w;
-    this.h = h;
-    this.color = color;
+    this.w = size;
+    this.h = size * 1.5;
+    this.greenScale = greenScale;
   }
+
   draw() {
-    fill(color);
-    triangle(x, y, x + w/2, y - h, x + w, y);
+    fill(5, this.greenScale, 21);
+    noStroke();
+    triangle(this.x, this.y, this.x + this.w/2, this.y - this.h, this.x + this.w, this.y);
   }
 }
 
@@ -39,6 +44,28 @@ function setup() {
         ys3.push(random(-windowHeight, 0));
     }
 
+    // populate trees array
+    for (let i = 0; i < 51; i++) {
+        const x = random(30, windowWidth - 30);
+        const y = random(windowHeight * 2/3, windowHeight - 75);
+        let size = 10;
+        let greenScale = 30;
+        if (y < windowHeight * 2/3 + (windowHeight * 1/3) * 1/4) {
+            size = size;
+            greenScale = greenScale;
+        } else if (y < windowHeight * 2/3 + (windowHeight * 1/3) * 2/4) {
+            size = size * 1.5;
+            greenScale = greenScale * 2;
+        } else if (y < windowHeight * 2/3 + (windowHeight * 1/3) * 3/4) {
+            size = size * 2;
+            greenScale = greenScale * 3;
+        } else {
+            size = size * 2.5;
+            greenScale = greenScale * 4;
+        }
+        trees.push({x, y, size, greenScale});
+    }
+
     startButton = createButton("Press to let it snow!");
     startButton.style("background-color", color("red"));
     startButton.style("color", color("white"));
@@ -49,9 +76,6 @@ function setup() {
     button = createButton(isPlaying ? "||" : '>');
     button.style("background-color", color("red"));
     button.style("color", color("white"));
-
-    console.log(windowWidth);
-    console.log(windowHeight);
 }
 
 function letItSnow() {
@@ -117,6 +141,22 @@ function letItSnow() {
     }   
 }
 
+function drawMountains() {
+    const layerNum = 3;
+    const incAmount = 0.01;
+    for (var l = 1; l < layerNum; l++) { // turn off first highest layer for faster rendering
+        const timeMoment = 0 + l * 5000;
+        const strokeColor = 25 + l * 12.5;
+        const mountHeight = 100 - l * 30;
+        for (var t = 0; t < incAmount * windowWidth; t += incAmount) {
+            const n = noise(timeMoment + t);
+            const y = map(n, 0, 1, 0, mountHeight);
+            stroke(strokeColor, strokeColor, strokeColor);
+            rect(t * 100, windowHeight * 2/3 - y, 1, y);
+        }
+    }
+};
+
 function playTune() {
     isPlaying = true;
     const tune = document.getElementById("tune");
@@ -138,10 +178,10 @@ function startAnimation() {
 }
 
 function draw() {
-    background(220);
+    background(200);
     
     //sky
-    fill("navy");
+    fill(8, 10, 51);
     rect(0, 0, windowWidth, windowHeight * 2/3);
 
     if (isLoadForTheFirstTime) {
@@ -166,30 +206,16 @@ function draw() {
     textSize(50);
     text("Let It Snow", windowWidth/2, windowHeight * 1/6 + 150);
 
+    // mountains
+    drawMountains();
+
     //trees
+    for (let i = 0; i < trees.length; i++) {
+        const tree = new Tree(trees[i].x, trees[i].y, trees[i].size, trees[i].greenScale);
+        tree.draw();
+    }
+
     noStroke()
-
-    //first group
-    fill("green");
-    triangle(60, windowHeight * 2/3 + 5, 88, windowHeight * 2/3 - 40, 116, windowHeight * 2/3 + 5);
-    fill("darkgreen");
-    triangle(90, windowHeight * 2/3 + 30, 115, windowHeight * 2/3 - 20, 140, windowHeight * 2/3 + 30);
-    fill("green");
-    triangle(200, windowHeight * 2/3 + 50, 230, windowHeight * 2/3 - 10, 260, windowHeight * 2/3 + 50);
-
-    // second group of trees
-    fill("green");
-    triangle(windowWidth/2 - 30, windowHeight * 2/3 + 10, windowWidth/2, windowHeight * 2/3 - 40, windowWidth/2 + 30, windowHeight * 2/3 + 10);
-    fill("darkgreen");
-    triangle(windowWidth/2 - 60, windowHeight * 2/3 + 30, windowWidth/2 - 30, windowHeight * 2/3 - 20, windowWidth/2, windowHeight * 2/3 + 30);
-    
-    // third group of trees
-    fill("green");
-    triangle(windowWidth - 100, windowHeight * 2/3 + 10, windowWidth - 70, windowHeight * 2/3 - 40, windowWidth - 40, windowHeight * 2/3 + 10);
-    fill("darkgreen");
-    triangle(windowWidth - 200, windowHeight * 2/3 + 30, windowWidth - 160, windowHeight * 2/3 - 20, windowWidth - 120, windowHeight * 2/3 + 30);
-    fill("green");
-    triangle(windowWidth - 240, windowHeight * 2/3 + 50, windowWidth - 200, windowHeight * 2/3 - 10, windowWidth - 160, windowHeight * 2/3 + 50);
 
     // footer
     fill(170);
