@@ -15,12 +15,14 @@ To make the animation seem more realistic, I created a pseudo 3D illusion thanks
 - more distant snowflakes are smaller, while closer are larger
 - more distant snowflakes fall slower, and closer ones fall faster
 
-In addition, I've implemented noise effect (noise() in p5.js) to falling snow, so now it seems to fall more naturally -> each snowflake moves sometimes slightly left or right, like in real life!
+In addition, I've implemented noise effect (noise() in p5.js) to:
+- falling snow, so now it seems to fall more naturally -> each snowflake moves sometimes slightly left or right, like in real life!
+- mountains on horizon
+
+And finally, there are 4-sized trees:
+- randomly positioned (every page reload => different trees positioning);
+- more distant trees are smaller & darker
+- closer trees are lighter & bigger
 
 ### Music Copyright
 &copy; 1959 Sammy Cahn, Jule Styne & Dean Martin
-
-### To do:
-- [X] optimize trees 3D illusion & perspective
-- [X] auto window resizing
-- [X] relocate trees groups due to resized window
