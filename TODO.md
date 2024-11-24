@@ -1,0 +1,2 @@
+- update footer with links to repo, my github profile & www
+- fix snowflakes positions when resizing a browser window

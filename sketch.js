@@ -1,6 +1,6 @@
 function preload() {
     // Load the image and create a p5.Image object.
-    bg_img = loadImage('/zima__winter_267_snieg__domy__swiatla__noc__gory.jpg');
+    bg_img = loadImage('zima__winter_267_snieg__domy__swiatla__noc__gory.jpg');
     // img source: https://www.tapeteos.pl/details.php?image_id=67262&big=1
 }
 
@@ -9,17 +9,29 @@ const H_RATIO = 0.5625;
 const W_RATIO = 1.77;
 
 function showBgImg() {
-    // image(
-    //     bg_img,
-    //     // x
-    //     windowWidth / 2 - windowHeight * W_RATIO / 2,
-    //     // y
-    //     0,
-    //     // img width
-    //     windowHeight * W_RATIO,
-    //     // img height
-    //     windowHeight);
-    image(bg_img, 0, 0, windowWidth, windowWidth * H_RATIO)
+    if (windowWidth <= windowHeight * W_RATIO) {
+        return image(
+            bg_img,
+            // x
+            windowWidth / 2 - windowHeight * W_RATIO / 2,
+            // y
+            0,
+            // img width
+            windowHeight * W_RATIO,
+            // img height
+            windowHeight);
+    }
+
+    image(
+        bg_img,
+        // x
+        0,
+        // y
+        windowHeight / 2 - windowWidth * H_RATIO / 2,
+        // img width
+        windowWidth,
+        // img height
+        windowWidth * H_RATIO);
 }
 
 function showLetItSnowText() {
@@ -35,19 +47,10 @@ function showLetItSnowText() {
     text("Let It Snow", windowWidth / 2, windowHeight * 1 / 6 + 150);
 }
 
-function showFooter() {
-    noStroke();
-
-    fill("white");
-    textStyle(NORMAL);
-    textAlign(CENTER);
-    textSize(17);
-    text("© 2021-2024 Vadim Gierko", windowWidth / 2, windowHeight - 50);
-    text("background image source: https://www.tapeteos.pl/details.php?image_id=67262&big=1", windowWidth / 2, windowHeight - 30);
-}
-
 //============================ INIT VARIABLES: =============================//
 
+let repoLink;
+let footerP;
 // SNOW
 
 // bigger / closer snow / 1000
@@ -102,6 +105,20 @@ function setup() {
     }
 
     createStartButton();
+
+    footerP = createP(`<span style="color: white">© 2021-2024 Vadim Gierko | </span><a style="color: white" href="https://github.com/vadimgierko/let-it-snow" target="_blank">see the code</a>`)
+}
+
+function showFooter() {
+    noStroke();
+
+    fill("white");
+    textStyle(NORMAL);
+    textAlign(CENTER);
+    textSize(17);
+    footerP.position(windowWidth / 2, 0)
+    footerP.center("horizontal");
+    text("background image source: https://www.tapeteos.pl/details.php?image_id=67262&big=1", windowWidth / 2, windowHeight - 30);
 }
 
 function letItSnow() {
@@ -209,4 +226,4 @@ function draw() {
 // Always resize the canvas to fill the browser window.
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-  }
+}
